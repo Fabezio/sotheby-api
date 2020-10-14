@@ -27,11 +27,11 @@
           } %>
             <div class="border">
                 <div class="thumbnail">
-                    <img class=".image" src="<%= paint.imgUrl %>" alt="mettre image">
+                    <img class="image" src="<%= paint.imgUrl %>" alt="mettre image">
                 </div>
                 <div class="description">
                     <strong><q><%= paint.name %></q></strong>
-                    <p><%= paint.author %></p>
+                    <a href="paintings/<%= paint.author %>" ><%= paint.author %></a>
                     <p class="price"><%= numStr(paint.price) %> M€</p>
                     
                 </div>

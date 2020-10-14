@@ -33,7 +33,7 @@ body {
     border-radius: 6px;
     border: 1px solid rgba(0,0,0,0.075);
 }
-img {
+.image {
     
     max-height: 320px;
     max-width: 320px;
