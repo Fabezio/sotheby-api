@@ -8,15 +8,40 @@
 </head>
 <body>
     <h1>sotheby's api</h1>
-    <% for (paint of oeuvres) { %>
-        <div class="border">
-            <p><%= paint.name %></p>
-            <p><%= paint.author %></p>
-            <p><%= paint.price %></p>
-            
-        </div>
-    <% } %>
-    <p>de la peinture? ou çà?</p>
+    <div id="views">
+
+        <% for (paint of oeuvres) { %>
+        <% function numStr(a, b) {
+            a = '' + a;
+            b = b || ' ';
+            var c = '',
+                d = 0;
+            while (a.match(/^0[0-9]/)) {
+              a = a.substr(1);
+            }
+            for (var i = a.length-1; i >= 0; i--) {
+              c = (d != 0 && d % 3 == 0) ? a[i] + b + c : a[i] + c;
+              d++;
+            }
+            return c;
+          } %>
+            <div class="border">
+                <div class="thumbnail">
+                    <img class=".image" src="<%= paint.imgUrl %>" alt="mettre image">
+                </div>
+                <div class="description">
+                    <strong><q><%= paint.name %></q></strong>
+                    <p><%= paint.author %></p>
+                    <p class="price"><%= numStr(paint.price) %> M€</p>
+                    
+                </div>
+                        
+                
+                
+            </div>
+        <% } %>
+    </div>
+    <!-- <p>de la peinture? ou çà?</p> -->
     
 </body>
 </html>
