@@ -6,9 +6,9 @@ const { urlencoded } = require('body-parser')
 // const { urlencoded } = require('body-parser')
 
 const app =  express()
-app.set(express.static("public"))
 app.set("view engine", 'ejs')
 app.set(bodyParser, urlencoded({extended: false}))
+app.use(express.static("public"))
 // const 
 
 mongoose.set("useUnifiedTopology", true)
@@ -21,16 +21,44 @@ const paintingSchema = new Schema ({
     price: Number
 })
 const Painting = mongoose.model("paintingSold", paintingSchema)
-// const ripo = new paintingSchema ({
-//     name: "cerise",
-//     author: "ripolin",
-//     price: 10.95
-// })
+
+const Joconde = new Painting ({
+    name: "La Joconde",
+    author: "Da Vinci",
+    price: 109
+})
+const Guernica = new Painting ({
+    name: "Guernica",
+    author: "Picasso",
+    price: 250
+})
+const Athenes = new Painting ({
+    name: "L'école d'Athènes",
+    author: "Raphael",
+    price: 300
+})
+const Creation = new Painting ({
+    name: "La Création d'Adam",
+    author: "Michel-Ange",
+    price: 400
+})
+
+// Painting.insertMany([Creation, Athenes])
+// Painting.deleteMany({name: "La Joconde"}, err => console.log(err || 'suppression effectuée'))
 // Painting.save([ripo])
 // Painting.find({}, err, data => console.log(err || data))
 
 app.get('/', (req, res) => res.render("index", {}))
-app.get('/paintings', (req, res) => res.render("paintings", {}))
+app.get('/paintings', (req, res) => {
+    Painting.find({}, (err, peinture) => {
+        if (err) console.log(err) 
+        else res.render("paintings",{ oeuvres: peinture})
+        // const 
+        // res.render("paintings", {})
+
+    //     res.send(err || peinture)
+    })
+})
 
 
 
