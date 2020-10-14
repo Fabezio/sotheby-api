@@ -1,8 +1,9 @@
 const express = require('express')
+const mongoose = require('mongoose')
 const ejs = require('ejs')
 const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
 const { urlencoded } = require('body-parser')
+// const { urlencoded } = require('body-parser')
 
 const app =  express()
 app.set(express.static("public"))
@@ -20,17 +21,16 @@ const paintingSchema = new Schema ({
     price: Number
 })
 const Painting = mongoose.model("paintingSold", paintingSchema)
-const ripo = new paintingSchema ({
-    name: "cerise",
-    author: "ripolin",
-    price: 10.95
-})
-Painting.save([ripo])
-Painting.find({}, err, data => console.log(err || data))
+// const ripo = new paintingSchema ({
+//     name: "cerise",
+//     author: "ripolin",
+//     price: 10.95
+// })
+// Painting.save([ripo])
+// Painting.find({}, err, data => console.log(err || data))
 
-app.get('/', (req, res) => {
-    res.render("index", {})
-})
+app.get('/', (req, res) => res.render("index", {}))
+app.get('/paintings', (req, res) => res.render("paintings", {}))
 
 
 
