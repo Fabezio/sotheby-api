@@ -56,8 +56,11 @@ const Cene = new Painting ({
     author: "Da Vinci",
     price: 1000
 })
-// Painting.updateOne({name: "La Grenouillère"}, {imgUrl: "https://www.connaissancedesarts.com/wp-content/thumbnails/uploads/2019/12/cda19_100ans_renoir_main-tt-width-970-height-545-fill-1-crop-0-bgcolor-ffffff.jpg"}, err => console.log(err || "image modifiée"))
-// Painting.updateOne({name: "L'école d'Athènes"}, {imgUrl: "https://cdn.pixabay.com/photo/2016/01/16/18/30/art-school-of-athens-1143741_1280.jpg"}, err => console.log(err || "mise à jour réussie"))
+
+
+function entryHandle(str) {
+    (function (err) {console.log(err || str)    })
+}
 // Painting.insertMany([Joconde, Athenes, Creation, Cene, Guernica], err => console.log(err || 'insertion effectuée'))
 
 // Painting.save([ripo])
@@ -90,19 +93,67 @@ app.post('/paintings', function (req, res) {
         price: req.body.price
     })
     // Painting = [...Painting, thisPaint]
-    thisPaint.save({}, (err, data) => {
-        console.log(err || 'enregistrement effectué')
-        res.send(data)
+    thisPaint.save({}, 
+        entryHandle("enregistrement effectué")
+        // (err, data) => {
+        //     console.log(err || 'enregistrement effectué')
+        //     res.send(data)
 
-    })
+        // }
+    )
     //     // console.log(err || req.body.name)
 
 })
 app.get('/paintings/:name', (req, res) => {
     // console.log(req.params.name)
-    const thisPaint = Painting.findOne({name: req.params.name}, (err, data) => {
-        return console.log(err || "nom incorrect") || res.render("_name", {data: data})
+    Painting.findOne({name: req.params.name}, (err, data) => {
+        if (err) {
+            console.log(err)
+            res.send(err)
+        } else {
+            console.log("voilà, chef!")
+            res.render("_name", {data: data})
+        }
+        // return console.log(err || "nom incorrect") || res.render("_name", {data: data})
     })
+})
+app.put('/paintings/:name', (req, res) => {
+    // console.log(req.params.name)
+    Painting.update(
+        {name: req.params.name},
+        {
+            name: req.body.name,
+            imgUrl: req.body.imgUrl,
+            author: req.body.author,
+            price: req.body.price,
+        }, {overwrite: true},
+        entryHandle("mise à jour via PUT")
+        // (err, data) => {
+        // if (err) {
+        //     console.log(err)
+        //     res.send(err)
+        // } else {
+        //     console.log("mise a jour complete")
+        //     res.render("_name", {data: data})
+        // }
+    )
+})
+
+app.patch('/paintings/:name', (req, res) => {
+    // console.log(req.params.name)
+    Painting.update(
+        {name: req.params.name}, {$set: req.body},
+        // (err, data) => {
+        //     if (err) {
+        //         console.log(err)
+        //         res.send(err)
+        //     } else {
+        //         console.log("mise a jour complete")
+        //         res.render("_name", {data: data})
+        //     }
+        // }
+        entryHandle('mise à jour via PATCH')
+    )
 })
 app.delete("/paintings", (req, res) => {
     Painting.deleteMany({}, err => console.log(err || "peintures supprimées"))
