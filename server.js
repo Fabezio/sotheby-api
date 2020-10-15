@@ -6,8 +6,10 @@ const { urlencoded } = require('body-parser')
 // const { urlencoded } = require('body-parser')
 
 const app =  express()
+
+// app.use(bodyParser, urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({extended: false}))
 app.set("view engine", 'ejs')
-app.set(bodyParser, urlencoded({extended: true}))
 app.use(express.static("public"))
 // const 
 
@@ -58,17 +60,17 @@ const Cene = new Painting ({
 // Painting.save([ripo])
 // Painting.find({}, err, data => console.log(err || data))
 
-// app.get('/', (req, res) => res.render("index", {}))
-// Painting.find().size({}, (err, nb) => console.log(err || nb))
-// console.log()
+app.get('/', (req, res) => res.render("index", {}))
+Painting.find().size({}, (err, nb) => console.log(err || nb))
+console.log()
 
 app.get('/paintings', (req, res) => {
     Painting.find({}, (err, peintures) => {
         if (err) console.log(err) 
-        else res.send(peintures)
+        // else res.send(peintures)
         // else res.send("paintings",{ oeuvres: peinture})
         // const 
-        // res.render("paintings", {})
+        res.render("paintings", {})
 
         // res.send(err || peinture)
     })
@@ -78,10 +80,11 @@ app.get("/addPainting", (req, res) => {
 })
 // app.get('paintings/add-painting', (req, res) => res.render("add-painting", {}))
 app.post('/paintings', function (req, res) {
+    // res.send(req)
     const thisPaint = new Painting({
-        name: res.body.name,
-        author: res.body.author,
-        price: res.body.price,
+        name: req.body.name,
+        author: req.body.author,
+        price: req.body.price
     })
     // Painting = [...Painting, thisPaint]
     thisPaint.save({}, (err, data) => {
@@ -89,7 +92,7 @@ app.post('/paintings', function (req, res) {
         res.send(data)
 
     })
-        // console.log(err || req.body.name)
+    //     // console.log(err || req.body.name)
 
 })
 app.delete("/paintings", (req, res) => {

@@ -7,7 +7,7 @@ const { urlencoded } = require('body-parser')
 
 const app =  express()
 app.set("view engine", 'ejs')
-app.set(bodyParser, urlencoded({extended: false}))
+app.set(bodyParser.urlencoded({extended: false}))
 app.use(express.static("public"))
 // const 
 
