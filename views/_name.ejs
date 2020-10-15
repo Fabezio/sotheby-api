@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>auteur</title>
+</head>
+<body>
+    <h1>auteur</h1>
+    <p>nombre de toiles exposées</p>
+    <p>valeur totale</p>
+    <div class="global-group">
+        
+        <div class="global-thumbnail">
+            <img src="" alt="" class="global-image">    
+        </div>
+    </div>
+
+    <% function numStr(a, b) {
+        a = '' + a;
+        b = b || ' ';
+        var c = '',
+            d = 0;
+        while (a.match(/^0[0-9]/)) {
+          a = a.substr(1);
+        }
+        for (var i = a.length-1; i >= 0; i--) {
+          c = (d != 0 && d % 3 == 0) ? a[i] + b + c : a[i] + c;
+          d++;
+        }
+        return c;
+      } %>
+    <div class="border">
+        <div class="thumbnail">
+            <img class="image" src="<%= data.imgUrl %>" alt="mettre image">
+        </div>
+        <div class="description">
+            <strong class="col"><q><%= data.name %></q></strong>
+            <a class="col" href="paintings/<%= data.author %>" ><%= data.author %></a>
+            <p class="col" class="price"><%= numStr(data.price) %> M€</p>
+            
+        </div>
+                
+        
+        
+    </div>
+    
+</body>
+</html>
