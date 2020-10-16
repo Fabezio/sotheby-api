@@ -58,106 +58,81 @@ const Cene = new Painting ({
 })
 
 
-function entryHandle(str) {
-    (function (err) {console.log(err || str)    })
-}
 // Painting.insertMany([Joconde, Athenes, Creation, Cene, Guernica], err => console.log(err || 'insertion effectuée'))
 
-// Painting.save([ripo])
-// Painting.find({}, err, data => console.log(err || data))
-
 app.get('/', (req, res) => res.render("index", {}))
-// Painting.find().size({}, (err, nb) => console.log(err || nb))
-// console.log()
 
-app.get('/paintings', (req, res) => {
-    Painting.find({}, (err, peintures) => {
-        if (err) console.log(err) 
-        // else res.send(peintures)
-        else res.render ("paintings",{ oeuvres: peintures})
-        // const 
-        // res.render("paintings", {})
-
-        // res.send(err || peinture)
+app.route('/paintings')
+    .get((req, res) => {
+        Painting.find({}, (err, peintures) => {
+            if (err) console.log(err) 
+            else res.render ("paintings",{ oeuvres: peintures})
+        })
     })
-})
+    
+    .post(function (req, res) {
+        const thisPaint = new Painting({
+            name: req.body.name,
+            author: req.body.author,
+            price: req.body.price
+        })
+        thisPaint.save({}, 
+            err => console.log(err ||"Enregistrement effectué")
+        )
+            
+    })
+    
+    .delete((req, res) => {
+        Painting.deleteMany({}, err => console.log(err || "peintures supprimées"))
+    })
+    
+
 app.get("/addPainting", (req, res) => {
     res.render("addPainting")
 })
-// app.get('paintings/add-painting', (req, res) => res.render("add-painting", {}))
-app.post('/paintings', function (req, res) {
-    // res.send(req)
-    const thisPaint = new Painting({
-        name: req.body.name,
-        author: req.body.author,
-        price: req.body.price
+
+app.route("/paintings/:_name")
+    .get( (req, res) => {
+        // console.log(req.params.name)
+        Painting.findOne({name: req.params._name}, (err, thisData) => {
+            if (err) {
+                console.log(err)
+                res.send(err)
+            } else {
+            }
+            
+            console.log(thisData)
+            res.render("_name", {data: thisData})
+        })
+            // entryHandle("enregistrement effectué")
     })
-    // Painting = [...Painting, thisPaint]
-    thisPaint.save({}, 
-        entryHandle("enregistrement effectué")
-        // (err, data) => {
-        //     console.log(err || 'enregistrement effectué')
-        //     res.send(data)
+    // })
 
-        // }
-    )
-    //     // console.log(err || req.body.name)
-
-})
-app.get('/paintings/:name', (req, res) => {
-    // console.log(req.params.name)
-    Painting.findOne({name: req.params.name}, (err, data) => {
-        if (err) {
-            console.log(err)
-            res.send(err)
-        } else {
-            console.log("voilà, chef!")
-            res.render("_name", {data: data})
-        }
-        // return console.log(err || "nom incorrect") || res.render("_name", {data: data})
+    .delete( (req, res) => {
+        Painting.deleteOne({name: req.params._name}, err => console.log(err ||"entrée effacée"))
     })
-})
-app.put('/paintings/:name', (req, res) => {
-    // console.log(req.params.name)
-    Painting.update(
-        {name: req.params.name},
-        {
-            name: req.body.name,
-            imgUrl: req.body.imgUrl,
-            author: req.body.author,
-            price: req.body.price,
-        }, {overwrite: true},
-        entryHandle("mise à jour via PUT")
-        // (err, data) => {
-        // if (err) {
-        //     console.log(err)
-        //     res.send(err)
-        // } else {
-        //     console.log("mise a jour complete")
-        //     res.render("_name", {data: data})
-        // }
-    )
-})
+    .put( (req, res) => {
 
-app.patch('/paintings/:name', (req, res) => {
-    // console.log(req.params.name)
-    Painting.update(
-        {name: req.params.name}, {$set: req.body},
-        // (err, data) => {
-        //     if (err) {
-        //         console.log(err)
-        //         res.send(err)
-        //     } else {
-        //         console.log("mise a jour complete")
-        //         res.render("_name", {data: data})
-        //     }
-        // }
-        entryHandle('mise à jour via PATCH')
-    )
-})
-app.delete("/paintings", (req, res) => {
-    Painting.deleteMany({}, err => console.log(err || "peintures supprimées"))
-})
+        
+        Painting.update(
+            {name: req.params._name},
+            {
+                name: req.body.name,
+                imgUrl: req.body.imgUrl,
+                author: req.body.author,
+                price: req.body.price,
+            }, {overwrite: true},
+            err => console.log(err ||"mise à jour via PUT")
+        )
+    })
+
+    .patch( (req, res) => {
+        // console.log(req.params.name)
+        Painting.update(
+            {name: req.params._name}, {$set: req.body},
+            err => console.log(err ||"mise à jour via PATCH")
+        )
+    })
 
 
 

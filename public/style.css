@@ -71,4 +71,9 @@ q {
 }
 .col {
     flex-direction: column;
+    margin-bottom: 10px;
+}
+.col a:hover {
+    text-decoration: underline;
+
 }
